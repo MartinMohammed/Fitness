@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import { Box, Stack, Typography } from "@mui/material";
+
+// OWN UTILITIES
 import fetchData, { exerciseOptions } from "../util/fetchData";
 
+// OWN COMPONENTS
 import ExerciseCard from "./ExerciseCard";
 
-// PURPOSE OF THE COMPNENT => SHOW DIFFERENT EXERCISES DEPENDING ON THE HORIZONTAL_SCROLLBAR
-// OR EXERCISE_SEARCH
+// CONSTANTS
+const EXERCISES_PER_PAGE = 9;
+
+// ---------- GET US DIFFERENT EXERCISES DEPENDING ON THE SELECTED_BODY_PART
 const Exercises = ({ exercises, setExercises, selectedBodyPart }) => {
+  // STATE
   const [currentPage, setCurrentPage] = useState(1);
-  const exercisesPerPage = 9;
 
   /* // * Dynamically determine the interval[start, end] of exercises we're currently on
   If currentPage = 2 : 2 * 9 = 18 is the last exerciseCard we render
@@ -17,8 +22,8 @@ const Exercises = ({ exercises, setExercises, selectedBodyPart }) => {
   [8, 18] = 9 Cards we render : currentExercises
   */
 
-  const indexOfLastExercise = currentPage * exercisesPerPage;
-  const indexOffFirstExercise = indexOfLastExercise - exercisesPerPage;
+  const indexOfLastExercise = currentPage * EXERCISES_PER_PAGE;
+  const indexOffFirstExercise = indexOfLastExercise - EXERCISES_PER_PAGE;
   const currentExercises = exercises.slice(
     indexOffFirstExercise,
     indexOfLastExercise
@@ -35,11 +40,13 @@ const Exercises = ({ exercises, setExercises, selectedBodyPart }) => {
     const fetchExercisesData = async () => {
       let exerciseData = [];
 
+      // FETCH ALL AVAILABLE EXERCISES DATA IN THE API (1320)
       if (selectedBodyPart === "all") {
         exerciseData = await fetchData(
           "https://exercisedb.p.rapidapi.com/exercises",
           exerciseOptions
-        ); // Fetch all exercies
+        );
+        // FETCH ONLY THE EXERCISES FOR THE PARTICUALR BODY PART
       } else {
         exerciseData = await fetchData(
           `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${selectedBodyPart}`,
@@ -63,9 +70,12 @@ const Exercises = ({ exercises, setExercises, selectedBodyPart }) => {
       mt="50px"
       p="20px"
     >
-      <Typography variant="h3" mb="46px">
-        Showing Results
-      </Typography>
+      {renderExercisesList.length > 0 && (
+        <Typography variant="h3" mb="46px">
+          Showing Results
+        </Typography>
+      )}
+
       <Stack
         direction="row"
         sx={{
@@ -77,7 +87,7 @@ const Exercises = ({ exercises, setExercises, selectedBodyPart }) => {
         {renderExercisesList}
       </Stack>
       <Stack mt="100px" alignItems="center">
-        {exercises.length > exercisesPerPage && (
+        {exercises.length > EXERCISES_PER_PAGE && (
           <Pagination
             color="standard"
             shape="rounded"
@@ -85,7 +95,7 @@ const Exercises = ({ exercises, setExercises, selectedBodyPart }) => {
             page={currentPage}
             size="large"
             onChange={paginate}
-            count={Math.ceil(exercises.length / exercisesPerPage)}
+            count={Math.ceil(exercises.length / EXERCISES_PER_PAGE)}
           />
         )}
       </Stack>

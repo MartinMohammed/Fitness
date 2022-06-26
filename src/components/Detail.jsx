@@ -8,6 +8,7 @@ import EquipmentImage from "../assets/icons/equipment.png";
 const Detail = ({ exerciseDetail }) => {
   const { bodyPart, gifUrl, name, target, equipment } = exerciseDetail;
 
+  // Template
   const extraDetail = useMemo(() => {
     return [
       {
@@ -28,7 +29,7 @@ const Detail = ({ exerciseDetail }) => {
     ];
   }, [bodyPart, equipment, target]);
 
-  const renderExtraDetail = extraDetail.map((extraDetail) => {
+  const renderExtraDetailCircles = extraDetail.map((extraDetail) => {
     return (
       <Stack
         key={extraDetail.id}
@@ -71,7 +72,7 @@ const Detail = ({ exerciseDetail }) => {
           is one of the best exercises to target your {target}. It will help you
           imporve your mood and gain energy
         </Typography>
-        {renderExtraDetail}
+        {renderExtraDetailCircles}
       </Stack>
     </Stack>
   );

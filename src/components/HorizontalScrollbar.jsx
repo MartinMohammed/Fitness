@@ -12,6 +12,7 @@ const HorizontalScrollbar = ({
   setSelectedBodyPart,
   isBodyParts,
 }) => {
+  // ---------- CAROUSEL NAVIGATION -----------
   const LeftArrow = () => {
     const { scrollPrev } = useContext(VisibilityContext);
 
@@ -31,6 +32,7 @@ const HorizontalScrollbar = ({
       </Typography>
     );
   };
+  // ----------------------------------------------
 
   const renderItems = data.map((item) => {
     return (
@@ -40,7 +42,9 @@ const HorizontalScrollbar = ({
         title={item.id || item}
         m="0 40px"
       >
-        {/* RENDERING DIFFERENT KINDS OF CARDS DEPENDING ON THE PURPOSE */}
+        {/* RENDERING DIFFERENT KINDS OF CARDS DEPENDING ON THE PURPOSE 
+            ENABLES US TO REUSE THE HORIZONTAL SCROLLBAR 
+        */}
         {isBodyParts ? (
           <BodyPartCard
             item={item}

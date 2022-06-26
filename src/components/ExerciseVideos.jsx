@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
+import Loader from "./Loader";
 
 const ExerciseVideos = ({ exerciseVideos, name }) => {
   const renderExerciseVideos = exerciseVideos
@@ -45,7 +46,7 @@ const ExerciseVideos = ({ exerciseVideos, name }) => {
         alignItems="center"
         sx={{ flexDirection: { lg: "row" }, gap: { lg: "110px", xs: "30px" } }}
       >
-        {!renderExerciseVideos?.length ? "Loading..." : renderExerciseVideos}
+        {!renderExerciseVideos?.length ? <Loader /> : renderExerciseVideos}
       </Stack>
     </Box>
   );

@@ -1,24 +1,33 @@
 import React, { useState, useEffect, useRef } from "react";
-
 //  Textfield => input field
 import { Box, Stack, Button, TextField, Typography } from "@mui/material";
-import HorizontalScrollbar from "./HorizontalScrollbar";
+
+// OWN UTILITIES
 import fetchData, { exerciseOptions } from "../util/fetchData";
 import GetOrFetch from "../util/GetOrFetch"; // For localstorage
+
+// COMPONENTS
+import HorizontalScrollbar from "./HorizontalScrollbar";
 
 const SearchExercises = ({
   setExercises,
   selectedBodyPart,
   setSelectedBodyPart,
 }) => {
+  // STATE
   const [search, setSearch] = useState("");
   const [bodyParts, setBodyParts] = useState([]);
+
+  // REF
   const inputRef = useRef();
 
+  // inputField / TextField
   const handleChange = (event) => {
     setSearch(event.target.value);
   };
-  const handleSearch = async (event, searchTerm) => {
+
+  // DO ACTUAL API REQUEST
+  const handleSearch = async (_, searchTerm) => {
     if (searchTerm || search) {
       const exercisesData = await fetchData(
         // we can also search for categories
@@ -40,24 +49,22 @@ const SearchExercises = ({
   };
 
   useEffect(() => {
-    // * THE PROBLEM WITH THAT IS: THE STATE INSIDE THE FUNCTION WILL NOT CHANGE
-    //  * INSIDE NATIVE DOM EVENT LISTENER
-    // * TO work around THAT problem:  useRef so we have an active reference
-    // *  to the input element
+    /* * ! STATE DOES NOT UPDATE INSIDE OF A NATIVE DOM EVENT LISTENER FUNCTION
+     * TO work around THAT problem:  useRef so we have an active reference
+     *  to the input element
+     */
+
     function handleSubmitWithMeta(event) {
       if (event.key === "Enter") {
         handleSearch(event, inputRef.current.value);
       }
+      // Ignore
     }
 
     //  => DONT WORK WITH NATIVE DOM METHODS like addEventListener
     document.addEventListener("keydown", handleSubmitWithMeta);
 
-    // use saveAndCheck
-    // provide it the function to fetch the data which returns the data we want
-
-    //  This function will be called if the items under the name we're not found in the localStorage
-    //  thereupon save the data from the api request in the localstorage and simultaneously return it to save state
+    // INITIAL CATEGORIES: [All, "Back", ...]
     const fetchExercisesData = async () => {
       const response = await fetch(
         "https://exercisedb.p.rapidapi.com/exercises/bodyPartList",
@@ -66,10 +73,14 @@ const SearchExercises = ({
       const bodyPartsData = await response.json();
       return bodyPartsData;
     };
+
+    // Params [0, 1] => First check for [0] in the localStorage else call [1] to save data as [0] in localStorage
+    // and return it back so we can save it as state
     GetOrFetch("bodyParts", fetchExercisesData).then((exerciseData) => {
       setBodyParts(["all", ...exerciseData]);
     });
 
+    // clean up function
     return () => {
       document.removeEventListener("keydown", handleSubmitWithMeta);
     };

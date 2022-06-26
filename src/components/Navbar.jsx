@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 /*
   The stack component manages layout of immediate
@@ -15,27 +15,32 @@ import LogoImage from "../assets/images/Logo.png";
 
 // Styled Components
 import NavLink from "./StyledComponents/NavLink";
-import Logo from "./StyledComponents/Logo";
 import AnchorLink from "./StyledComponents/AnchorLink";
+import Logo from "./StyledComponents/Logo";
 
 const Navbar = () => {
+  const location = useLocation();
   return (
     <Stack
       direction="row"
       justifyContent="none"
-      // gap is changing its size depnding on the device
       sx={{
         gap: { sm: "122px", xs: "40px; " },
         mt: { sm: "32px", xs: "20px" },
       }}
       px="20px"
     >
+      {/* LOGO */}
       <Link to="/">
         <Logo src={LogoImage} alt="Logo" />
       </Link>
       <Stack direction="row" gap="40px" fontSize="24px" alignItems="flex-end">
+        {/* MAIN NAV */}
         <NavLink to="/">Home</NavLink>
-        <AnchorLink href="#exercises">Exercises</AnchorLink>
+        {/* Only the Home Page contains the "exercises" section */}
+        {!location.pathname.includes === "/" && (
+          <AnchorLink href="#exercises">Exercises</AnchorLink>
+        )}
       </Stack>
     </Stack>
   );

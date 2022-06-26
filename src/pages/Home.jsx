@@ -11,6 +11,7 @@ const Home = () => {
   // not just in the searchExercises but in the exercises itself
 
   // ! SHOULD USE REACT CONTEXT API
+  // STATE
   const [exercises, setExercises] = useState([]);
   const [selectedBodyPart, setSelectedBodyPart] = useState("all");
 
