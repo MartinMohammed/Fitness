@@ -19,7 +19,12 @@ export const youtubeOptions = {
 const fetchData = async (url, options) => {
   const response = await fetch(url, options);
   const data = await response.json(); // extract the data
-
+  if (
+    data.message ===
+    "You have exceeded the MONTHLY quota for Requests on your current plan, BASIC. Upgrade your plan at https://rapidapi.com/justin-WFnsXH_t6/api/exercisedb"
+  ) {
+    return [];
+  }
   return data;
 };
 
