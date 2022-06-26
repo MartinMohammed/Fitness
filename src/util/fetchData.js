@@ -6,6 +6,14 @@ export const exerciseOptions = {
   },
 };
 
+export const youtubeOptions = {
+  method: "GET",
+  headers: {
+    "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_YOUTUBE_KEY,
+    "X-RapidAPI-Host": process.env.REACT_APP_RAPID_API_YOUTUBE_HOST,
+  },
+};
+
 // * All Util files should be created so that we can reuse it all over the application
 
 const fetchData = async (url, options) => {

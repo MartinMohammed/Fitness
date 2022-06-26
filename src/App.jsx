@@ -14,11 +14,11 @@ import ExerciseDetail from "./pages/ExerciseDetail";
 const App = () => {
   return (
     // On extra large devices - responsive design
-    <Box width="400px" sx={{ width: { xl: "1488px" } }} m="auto">
+    <Box width="400px" sx={{ width: { xl: "100%" } }} m="auto">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/exercise:/id" element={<ExerciseDetail />}></Route>
+        <Route path="/exercise/:id" element={<ExerciseDetail />}></Route>
       </Routes>
       <Footer />
     </Box>

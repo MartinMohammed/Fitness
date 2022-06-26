@@ -18,15 +18,14 @@ const SearchExercises = ({
   const handleChange = (event) => {
     setSearch(event.target.value);
   };
-  const handleSearch = async (searchTerm) => {
-    if (search) {
+  const handleSearch = async (event, searchTerm) => {
+    if (searchTerm || search) {
       const exercisesData = await fetchData(
         // we can also search for categories
         "https://exercisedb.p.rapidapi.com/exercises", // all the available exercises
         exerciseOptions
       );
       const searchedData = exercisesData.filter((exercise) => {
-        console.log(searchTerm);
         // Search Algorithm
         return (
           exercise.name.toLowerCase().includes(searchTerm || search) ||
@@ -47,8 +46,7 @@ const SearchExercises = ({
     // *  to the input element
     function handleSubmitWithMeta(event) {
       if (event.key === "Enter") {
-        handleSearch(inputRef.current.value);
-        console.log("searched");
+        handleSearch(event, inputRef.current.value);
       }
     }
 
@@ -127,6 +125,7 @@ const SearchExercises = ({
 
       <Box sx={{ position: "relative", width: "100%", p: "20px" }}>
         <HorizontalScrollbar
+          isBodyParts={true}
           data={bodyParts}
           selectedBodyPart={selectedBodyPart}
           setSelectedBodyPart={setSelectedBodyPart}

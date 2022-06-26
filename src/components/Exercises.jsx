@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import { Box, Stack, Typography } from "@mui/material";
-import { exerciseOptions, fetchData } from "../util/fetchData";
+import fetchData, { exerciseOptions } from "../util/fetchData";
+import GetOrFetch from "../util/GetOrFetch";
 
 import ExerciseCard from "./ExerciseCard";
 
+// PURPOSE OF THE COMPNENT => SHOW DIFFERENT EXERCISES DEPENDING ON THE HORIZONTAL_SCROLLBAR
+// OR EXERCISE_SEARCH
 const Exercises = ({ exercises, setExercises, selectedBodyPart }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const exercisesPerPage = 9;
@@ -28,6 +31,28 @@ const Exercises = ({ exercises, setExercises, selectedBodyPart }) => {
     setCurrentPage(value);
     window.scrollTo({ top: 1800, behavior: "smooth" });
   };
+
+  useEffect(() => {
+    const fetchExercisesData = async () => {
+      let exerciseData = [];
+
+      if (selectedBodyPart === "all") {
+        exerciseData = await fetchData(
+          "https://exercisedb.p.rapidapi.com/exercises",
+          exerciseOptions
+        ); // Fetch all exercies
+      } else {
+        exerciseData = fetchData(
+          `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${selectedBodyPart}`,
+          exerciseOptions
+        );
+        setExercises(exerciseData);
+      }
+    };
+
+    fetchExercisesData();
+  }, [selectedBodyPart]);
+
   const renderExercisesList = currentExercises.map((exerciseItem, index) => {
     return <ExerciseCard exerciseItem={exerciseItem} key={index} />;
   });
