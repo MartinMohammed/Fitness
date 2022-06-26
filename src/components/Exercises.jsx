@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import { Box, Stack, Typography } from "@mui/material";
 import fetchData, { exerciseOptions } from "../util/fetchData";
-import GetOrFetch from "../util/GetOrFetch";
 
 import ExerciseCard from "./ExerciseCard";
 
@@ -42,7 +41,7 @@ const Exercises = ({ exercises, setExercises, selectedBodyPart }) => {
           exerciseOptions
         ); // Fetch all exercies
       } else {
-        exerciseData = fetchData(
+        exerciseData = await fetchData(
           `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${selectedBodyPart}`,
           exerciseOptions
         );
